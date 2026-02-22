@@ -25,7 +25,8 @@ uploaded_files = st.file_uploader(
         accept_multiple_files=True, type=['csv', 'txt', 'wsv'])
 
 if isinstance(uploaded_files, list):
-    file = st.selectbox('Selecione arquivo', map(lambda f: f.name, uploaded_files))
+    file_name = st.selectbox('Selecione arquivo', map(lambda f: f.name, uploaded_files))
+    file = list(filter(lambda f: f.name == file_name, uploaded_files))[0]
 else:
     file = uploaded_files
 
@@ -45,7 +46,7 @@ with st.expander('Visualizar arquivo'):
 with st.expander('Selecione os dados', expanded=True):
     st.header('Utilize o botão "Box Select" para selecionar a queima na imagem.')
     st.text('Utilize os botões "Zoom", "Pan" e "Reset Axis" para auxiliar na navegação.')
-    full_fig = px.line(x=full_data[:, 0], y=-full_data[:, 1], markers=True, title=file, template='plotly_dark')
+    full_fig = px.line(x=full_data[:, 0], y=-full_data[:, 1], markers=True, title=file.name, template='plotly_dark')
     full_fig.update_layout(xaxis_title='Tempo', yaxis_title='Empuxo')
 
     selection_event = st.plotly_chart(
@@ -93,7 +94,7 @@ data_dict = {
 # exibição dos dados
 # ------------------
 st.header('Dados do teste estático', divider=True)
-name = st.text_input('Nome do teste:', value='Teste')
+name = st.text_input('Nome do teste:', value=file.name)
 
 col1, col2 = st.columns([60,40])
 with col1:
