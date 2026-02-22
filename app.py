@@ -26,7 +26,10 @@ uploaded_files = st.file_uploader(
 
 if isinstance(uploaded_files, list):
     file_name = st.selectbox('Selecione arquivo', map(lambda f: f.name, uploaded_files))
-    file = list(filter(lambda f: f.name == file_name, uploaded_files))[0]
+    if file_name is None:
+        file = None
+    else:
+        file = list(filter(lambda f: f.name == file_name, uploaded_files))[0]
 else:
     file = uploaded_files
 
